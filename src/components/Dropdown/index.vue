@@ -1,18 +1,15 @@
 <template>
-<div class="dropdown" @click="onClick">
-  <a class="dropdown-toggle" href="javascript:;">{{title}}</a>
-  <!-- <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+<div class="dropdown" ref="dropdownRef">
+  <a class="btn btn-outline-light my-2 dropdown-toggle" href="javascript:;"  @click="toggleOpen">{{title}}</a>
+  <ul class="dropdown-menu" style="display: block;" v-if="isOpen">
     <slot></slot>
-  </ul> -->
-  <div class="dropdown-menu" style="display: block;" v-if="isOpen">
-    <a class="dropdown-item" href="#">Action</a>
-    <a class="dropdown-item" href="#">Another action</a>
-    <a class="dropdown-item" href="#">Something else here</a>
-  </div>
+  </ul>
 </div>
 </template>
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, watch } from 'vue'
+import useClickOutside from '../../hooks/useClickOutside'
+
 export default defineComponent({
   props: {
     title: {
@@ -22,17 +19,27 @@ export default defineComponent({
   },
   setup(props,context){
     const isOpen = ref(false)
-    const onClick = () =>{
+    const dropdownRef = ref<null | HTMLElement>(null)
+    const isClickOutsite = useClickOutside(dropdownRef)
+    const toggleOpen = () =>{
       isOpen.value = !isOpen.value
-      console.log(isOpen.value)
     }
+    watch(isClickOutsite,()=>{
+      if(isOpen.value && isClickOutsite.value){
+        isOpen.value = false
+      }
+    })
     return { 
       isOpen,
-      onClick
+      toggleOpen,
+      dropdownRef
     }
-  }
+  },
+  
 })
 </script>
 <style lang="scss">
-
+  .dropdown-toggle{
+    color: #565656;
+  }
 </style>

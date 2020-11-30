@@ -11,17 +11,13 @@ export default defineComponent({
       type: Boolean,
       default: false
     }
-  },
-  setup(props,context){    
-    return {
-    }
   }
 })
 </script>
 <style lang="scss">
-  .dropdown-item.is-disabled *{
+  .dropdown-item.is-disabled,.dropdown-item.is-disabled *{
     color: #6c757d;
-    pointer-events: none;
+    pointer-events: none !important;
     background-color: transparent;
   }
 </style>
