@@ -7,18 +7,17 @@
   </div>
 </template>
 <script lang="ts">
-import HHeader, { UserProps } from './header.vue'
-import { defineComponent } from 'vue'
-const currentUser: UserProps = {
-  isLogin: false,
-  userName: 'laibobo'
-}
+import HHeader from './header.vue'
+import { computed, defineComponent } from 'vue'
+import { useStore } from 'vuex'
+
 export default defineComponent({
   components:{
     HHeader
   },
   setup(props,context){
-    currentUser.isLogin = false
+    const store = useStore()
+    const currentUser = computed(() => store.state.user)
     return {
       currentUser
     }

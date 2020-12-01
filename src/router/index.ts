@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
+import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import Layout from '../views/Layout/index.vue'
 
 const routes: Array<RouteRecordRaw> = [
@@ -11,22 +11,30 @@ const routes: Array<RouteRecordRaw> = [
         path: '/home',
         name: 'Home',
         component: () => import('@/views/Home.vue')
-      }
+      },
+      {
+        path: '/column/:id',
+        name: 'ColumnDetail',
+        component: () => import(/* webpackChunkName: "column" */ '@/views/SpecialColumn/detail.vue')
+      },
     ]
   },
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    path: '/login',
+    name: 'Login',
+    component: () => import(/* webpackChunkName: "login" */ '@/views/Login.vue'),
+    meta:{
+      title: '用户登录'
+    }
   }
 ]
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes
 })
-
+router.beforeEach((to,from,next)=>{
+  document.title = to.meta?.title || '无乎'
+  next()
+})
 export default router
