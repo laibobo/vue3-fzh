@@ -4,7 +4,8 @@
     <div class="col card mr-4" v-for="item in list" :key="item.id">
       <img :src="item.author" class="card-img-top">
       <div class="card-body">
-        <h5 class="card-title">{{item.title}}</h5>
+        <h5 class="card-title">{{ item.title }}</h5>
+        <h6>关注 {{ item.followCount }}, 文章 {{ item.articleCount }}</h6>
         <p class="card-text" v-if="item.description">{{item.description}}</p>
         <a href="#" class="btn btn btn-outline-primary">进入专栏</a>
       </div>
@@ -31,6 +32,7 @@ export default defineComponent({
 
   },
   setup(props,context){
+    
   }
 })
 </script>

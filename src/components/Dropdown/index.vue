@@ -24,7 +24,7 @@ export default defineComponent({
     const toggleOpen = () =>{
       isOpen.value = !isOpen.value
     }
-    watch(isClickOutsite,()=>{
+    watch(isClickOutsite, ()=>{
       if(isOpen.value && isClickOutsite.value){
         isOpen.value = false
       }
@@ -34,8 +34,7 @@ export default defineComponent({
       toggleOpen,
       dropdownRef
     }
-  },
-  
+  }  
 })
 </script>
 <style lang="scss">
