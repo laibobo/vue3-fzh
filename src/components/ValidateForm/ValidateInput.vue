@@ -1,18 +1,20 @@
 <template>
   <div class="validate-input-container pb-3">
     <input class="form-control" :class="{'is-invalid':inputRef.error}" v-bind="$attrs" :value="inputRef.value" @blur="validateInput" @input="updateValue" />
-    <div class="invalid-feedback" :style="{display:'block'}" v-show="inputRef.error">{{ inputRef.message }}</div>
+    <div class="invalid-feedback text-left" :style="{display:'block'}" v-show="inputRef.error">{{ inputRef.message }}</div>
   </div>
 </template>
 <script lang="ts">
 //is-valid 校验通过  is-invalid 校验失败
 import { defineComponent, onMounted, PropType, reactive, ref } from 'vue'
 interface RuleProps {
-  type: 'requied';
+  type: 'requied' | 'custom';
   message: string;
+  validator?: () => boolean;
 }
 export type RulesProps = RuleProps[]
 import mitt from 'mitt'
+import message from '../Message/message'
 export const emitter = mitt()
 export default defineComponent({
   props: {
@@ -39,10 +41,13 @@ export default defineComponent({
         inputRef.error = props.rules.every(rule => {
           let nopassed = false
           inputRef.message = rule.message
+          console.log('message:',inputRef.message)
           switch(rule.type){
             case 'requied':
               nopassed = inputRef.value.trim() === ''
             break;
+            case 'custom':
+              nopassed = rule.validator ? rule.validator() : false
             default:
               break;
           }

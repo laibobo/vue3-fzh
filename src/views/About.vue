@@ -12,13 +12,6 @@
         <a class="dropdown-item">Something else here</a>
       </dropdown-item>
     </dropdown>
-    <validate-form @form-submit="onSubmitForm">
-      <validate-input type="text" :rules="rules" v-model="userName" placeholder="请输入名称" />
-      <validate-input type="password" :rules="rules" v-model="userName" placeholder="请输入密码" />
-      <!-- <template #submit>
-        <a></a>
-      </template> -->
-    </validate-form>
   </div>
 </template>
 <script lang="ts">
@@ -41,14 +34,9 @@ export default defineComponent({
     ValidateInput
   },
   setup() {
-    const userName = ref('')
-    const onSubmitForm = (valid:boolean) => {
-      console.log('onSubmitForm:',valid)
-    }
     return {
-      rules,
-      userName,
-      onSubmitForm
+      rules
+      
     }
   }
 })

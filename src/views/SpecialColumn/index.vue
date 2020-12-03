@@ -1,13 +1,12 @@
 <template>
-  <!-- 专栏 -->
-  <div class="row">
-    <div class="col card mr-4" v-for="item in list" :key="item.id">
-      <img :src="item.avatar" class="card-img-top">
+  <!-- 专栏列表 -->
+  <div class="row row-cols-2">
+    <div class="card col-3 mb-3" v-for="item in list" :key="item.id">
+      <img :src="item.avatar.url" class="card-img-top">
       <div class="card-body">
         <h5 class="card-title">{{ item.title }}</h5>
-        <h6>关注 {{ item.followCount }}, 文章 {{ item.articleCount }}</h6>
-        <p class="card-text" v-if="item.description">{{item.description}}</p>
-        <router-link :to="`/column/${item.id}`" class="btn btn btn-outline-primary">进入专栏</router-link>
+        <p class="card-text text-left" v-if="item.description">{{item.description}}</p>
+        <router-link :to="`/column/${item._id}`" class="btn btn btn-outline-primary">进入专栏</router-link>
       </div>
     </div>
   </div>
@@ -15,12 +14,10 @@
 <script lang="ts">
 import { defineComponent, Prop, PropType } from 'vue'
 export interface ColumnProps {
-  id: string | number,
-  avatar: string,
-  title: string,
-  description?: string,
-  followCount: number,
-  articleCount: number
+  _id: string;
+  avatar: object;
+  title: string;
+  description?: string
 }
 export default defineComponent({
   name: 'SpecialColumn',
@@ -28,11 +25,7 @@ export default defineComponent({
     list: {
       type: Array as PropType<ColumnProps[]>,
       requird: true
-    },
-
-  },
-  setup(props,context){
-    
+    }
   }
 })
 </script>

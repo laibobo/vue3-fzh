@@ -23,13 +23,13 @@
         <div class="d-flex">
           <div v-if="!user.isLogin">
             <router-link class="btn btn-outline-primary mr-3" to="/login">登录</router-link>
-            <router-link class="btn btn-primary" to="/login">加入无乎</router-link>
+            <router-link class="btn btn-primary" to="/sign">加入无乎</router-link>
           </div>
-          <a v-else class="nav-link" href="#" tabindex="-1">欢迎您，{{user.userName}}</a>
+          <a v-else class="nav-link" href="#" tabindex="-1">欢迎您，{{user.nickName}}</a>
         </div>
       </div>
   </div>
-</nav>
+  </nav>
 </template>
 <script lang="ts">
 import { defineComponent, PropType, ref } from 'vue'
@@ -50,5 +50,3 @@ export default defineComponent({
   }
 })
 </script>
-<style lang="scss">
-</style>
