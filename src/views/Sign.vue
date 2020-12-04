@@ -56,7 +56,7 @@ export default defineComponent({
       {
         type: 'custom',
         validator: () =>{
-          return password.value !== affirmPassword.value
+          return password.value === affirmPassword.value
         },
         message: '密码2次输入不一致'
       }

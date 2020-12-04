@@ -38,21 +38,21 @@ export default defineComponent({
 
     const validateInput = () =>{
       if(props.rules){
-        inputRef.error = props.rules.every(rule => {
-          let nopassed = false
+        const isPass = props.rules.every(rule => {
+          let nopassed = true
           inputRef.message = rule.message
-          console.log('message:',inputRef.message)
           switch(rule.type){
             case 'requied':
-              nopassed = inputRef.value.trim() === ''
+              nopassed = inputRef.value.trim() !== ''
             break;
             case 'custom':
-              nopassed = rule.validator ? rule.validator() : false
+              nopassed = rule.validator ? rule.validator() : true
             default:
               break;
           }
           return nopassed
         })
+        inputRef.error = !isPass
       }
       return !inputRef.error
     }
