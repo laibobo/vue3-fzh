@@ -31,7 +31,7 @@ interface UserProps{
   column?: string;
   _id?: string;
 }
-interface errorProps {
+interface GlobalRrrorProps {
   status: boolean;
   message: string;
 }
@@ -42,7 +42,7 @@ export interface GlobalDataProps {
   user: UserProps;
   loader: boolean;
   token: string;
-  error: errorProps;
+  error: GlobalRrrorProps;
 }
 
 const asyncAndCommit = async(
@@ -85,33 +85,43 @@ export default createStore<GlobalDataProps>({
     setLoding(state, status) {
       state.loader = status
     },
+    setError(state, payload){
+      state.error = payload
+    },
     setToken(state, token) {
       state.token = token
     },
-    setError(state, payload){
-      state.error = payload
+    login(state, rawData) {
+      const { token } = rawData
+      state.token = token
+      localStorage.setItem('token', token)
+    },
+    logout(state) {
+      state.token = ''
+      state.user = { isLogin: false }
+      localStorage.removeItem('token')
     }
   },
   actions: {
     fetchColumns({ commit }, { currentPage, pageSize }) {
-      asyncAndCommit(`columns?currentPage=${currentPage}&pageSize=${pageSize}`, 'setColumns', commit)
+      return asyncAndCommit(`columns?currentPage=${currentPage}&pageSize=${pageSize}`, 'setColumns', commit)
     },
     fetchColumn({ commit }, columnId) {
-      asyncAndCommit(`columns/${columnId}`, 'setColumn', commit)
+      return asyncAndCommit(`columns/${columnId}`, 'setColumn', commit)
     },
     fetchColumnArticle({ commit }, { currentPage, pageSize, columnId }) {
-      asyncAndCommit(`columns/${columnId}/posts?currentPage=${currentPage}&pageSize=${pageSize}`, 'setPosts', commit)
+      return asyncAndCommit(`columns/${columnId}/posts?currentPage=${currentPage}&pageSize=${pageSize}`, 'setPosts', commit)
     },
-    loginAndFetchUser({ dispatch, commit }, param) {
-      return axios.post('user/login', param).then(({data}) => {
-        const token = data.data.token
-        commit('setToken',token)
-        localStorage.setItem('token', token)
+    loginAndFetchUser({ dispatch }, payload) {
+      return dispatch('login', payload).then(() => {
         return dispatch('fetchCurrentUser')
       })
     },
     fetchCurrentUser({ commit }) {
-      asyncAndCommit('user/current', 'setCurrentUser', commit)
+      return asyncAndCommit('user/current', 'setCurrentUser', commit)
+    },
+    login({ commit }, data){
+      return asyncAndCommit('user/login', 'login',commit, { method:'post', data })
     }
   },
   modules: {

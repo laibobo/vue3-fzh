@@ -24,13 +24,6 @@ export default defineComponent({
         showMessage(message, 'danger')
       }
     })
-    onMounted(() => {
-      const token = localStorage.getItem('token')
-      if(token){
-        store.commit('setToken',token)
-        store.dispatch('fetchCurrentUser')
-      }
-    })
     return {
       isLoader
     }

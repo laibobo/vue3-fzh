@@ -53,10 +53,31 @@ const router = createRouter({
   scrollBehavior: () => (({ top: 0, left: 0 })),
 })
 router.beforeEach((to, from, next)=>{
-  if(!store.state.user.isLogin && to.meta.requiredLogin){
-    next({ name: 'Login' })
-  }else if(to.meta.redirectAlreadyLogin && store.state.user.isLogin){
-    next({ name: '/' })
+  const { requiredLogin ,redirectAlreadyLogin } = to.meta
+  const isLogin = store.state.user.isLogin
+  const token = localStorage.getItem('token')
+  /**
+   * 1,没有登录：
+   *   a: 如有token，去获取用户信息。如token过期 清空token信息，并跳转登录页
+   *   b: 没有token，并且该路由需要登录，则跳转到登录页
+   * 2，已登录，并且redirectAlreadyLogin 为true，跳转首页
+  */
+  if(!isLogin){
+    if(token){
+      store.dispatch('fetchCurrentUser').then(()=>{
+        next()
+      }).catch(e=>{
+        console.error(e)
+        store.commit('logout')
+        next('login')
+      })
+    }else if(requiredLogin){
+      next('login')
+    }else{
+      next()
+    }
+  }else if(isLogin && redirectAlreadyLogin){
+    next('/')
   }else{
     next()
   }
